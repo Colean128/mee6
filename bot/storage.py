@@ -7,6 +7,7 @@ def prefixer(function, pref_type):
     if pref_type == 'name':
         @wraps(function)
         def wrapper(self, *args, **kwargs):
+            print(self.namespace + args[0])
             return function(self, self.namespace + args[0], *(args[1:]), **kwargs)
         return wrapper
     elif pref_type == 'names':
@@ -29,9 +30,9 @@ def prefixer(function, pref_type):
 
 
 def prefix_methods(cls):
-    for attr in cls.__dict__:
-        method = getattr(cls, attr)
-        if callable(method):
+    for attr, value in inspect.getmembers(cls.__bases__[0]):
+        method = value
+        if inspect.ismethod(method):
             args = inspect.getargspec(method)[0]
             varargs = inspect.getargspec(method)[1]
             if len(args)>1 and args[1] == 'name':
@@ -55,15 +56,3 @@ class Storage(Redis):
         namespace = kwargs.pop('namespace')
         connection_pool = ConnectionPool.from_url(url, db=db, **kwargs)
         return cls(connection_pool=connection_pool, namespace=namespace)
-
-    def get(self, name):
-        name = self.namespace + name
-        return Redis.get(self, name)
-
-    def set(self, *args, **kwargs):
-        args[0] = self.namespace + args[0]
-        return Redis.set(self, *args, **kwargs)
-
-    def incr(self, name, amount=1):
-        name = self.namespace + name
-        return Redis.incr(self, name, amount=1)
