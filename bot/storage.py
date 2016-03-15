@@ -7,7 +7,6 @@ def prefixer(function, pref_type):
     if pref_type == 'name':
         @wraps(function)
         def wrapper(self, *args, **kwargs):
-            print(self.namespace + args[0])
             return function(self, self.namespace + args[0], *(args[1:]), **kwargs)
         return wrapper
     elif pref_type == 'names':
@@ -32,7 +31,7 @@ def prefixer(function, pref_type):
 def prefix_methods(cls):
     for attr, value in inspect.getmembers(cls.__bases__[0]):
         method = value
-        if inspect.ismethod(method):
+        if inspect.isfunction(method):
             args = inspect.getargspec(method)[0]
             varargs = inspect.getargspec(method)[1]
             if len(args)>1 and args[1] == 'name':
