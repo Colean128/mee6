@@ -19,6 +19,11 @@ class Mee6(discord.Client):
         self.plugin_manager.load_all()
 
     @asyncio.coroutine
+    def on_ready(self):
+        with open('welcome_ascii.txt') as f:
+            print(f.read())
+
+    @asyncio.coroutine
     def _run_plugin_event(self, plugin, event, *args, **kwargs):
         # A modified coro that is based on Client._run_event
         try:
