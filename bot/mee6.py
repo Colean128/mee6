@@ -6,6 +6,7 @@ from database import Db
 from utils import find_server
 
 from plugins.hello import Hello
+from plugins.commands import Commands
 
 log = logging.getLogger('discord')
 
