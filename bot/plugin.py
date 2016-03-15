@@ -14,5 +14,8 @@ class Plugin(object, metaclass=PluginMount):
         self.mee6 = mee6
         self.db = mee6.db
 
+    def get_storage(self, server):
+        return self.mee6.db.get_storage(self, server)
+
     def key(self, k):
         prefix = '{0.__class__.__name__}.{1}:'.format(self, server.id)
