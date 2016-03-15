@@ -5,3 +5,4 @@ def find_server(*args, **kwargs):
     for key, value in kwargs.items():
         if hasattr(value, 'server'):
             return arg.server
+    return None
