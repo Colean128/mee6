@@ -23,6 +23,14 @@ class Mee6(discord.Client):
         with open('welcome_ascii.txt') as f:
             print(f.read())
 
+        yield from self.heartbeat(5)
+
+    @asyncio.coroutine
+    def heartbeat(self, interval):
+        while self.is_logged_in:
+            self.db.redis.set('heartbeat', 1, ex=interval)
+            yield from asyncio.sleep(0.9 * interval)
+
     @asyncio.coroutine
     def _run_plugin_event(self, plugin, event, *args, **kwargs):
         # A modified coro that is based on Client._run_event
