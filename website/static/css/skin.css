@@ -1,0 +1,88 @@
+.home-navbar {
+    margin-bottom: 0;
+    padding-top: 10px;
+}
+
+.beta-badge{
+    background-color: #006687;
+}
+
+.dashboard-nav{
+    margin-bottom: 0;
+}
+
+.jumbotron small{
+    color:#FFF;
+}
+
+.vertical-align {
+  display: flex;
+  flex-direction: row;
+}
+
+.vertical-align > [class^="col-"],
+.vertical-align > [class*=" col-"] {
+  display: flex;
+  align-items: center;     /* Align the flex-items vertically */
+}
+.vertical-align h2{
+    margin: 0;
+    padding: 0;
+}
+
+.home-jumbotron{
+    background-color: #008cba;
+    min-height: 100%;
+    min-height: 100vh;
+    display: flex;
+    padding:0;
+    margin: 0;
+    align-items: center;
+}
+.dashboard-jumbotron{
+    background-color: #008cba;
+    color:#FFF;
+}
+.profile-image{
+    height: 21px;
+    width: 21px;
+    line-height: 21px;
+}
+.server-logo{
+    width:100px;
+    height: 100px;
+    margin:4px;
+}
+.disabled{
+    background-color:#e99002;
+}
+.soon{
+    background-color: #EFEFEF;
+    color:#000;
+}
+
+.discord-logo1{
+    width:5em;
+    margin-top:0.15em;
+}
+.discord-logo2{
+    width:5em;
+    margin-bottom:0.2em;
+}
+
+.btn-home{
+    background-color: #FFF;
+}
+.btn-home:hover{
+    background-color: #006687;
+    color:#FFF;
+}
+.btn-about{
+    background-color: #006687;
+    color:#FFF;
+}
+
+.home-body{
+    background-color: #008cba;
+    color:#FFF;
+}

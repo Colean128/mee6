@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Jumbotron Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/skin.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/morphext.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  </head>
+
+  <body class="home-body">
+
+    <nav class="navbar navbar-inverse home-navbar navbar-fixed-top animated bounceInDown">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Mee6 <span class="badge beta-badge">BETA</span></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Status</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#" class="dropdown-toggle" data-toggle="dropdown" id="community">Community</a>
+                <ul class="dropdown-menu" aria-labelledby="community">
+                <li><a href="#">Twitter</a></li>
+                <li><a href="#">Discord</a></li>
+                <li><a href="#">Github</a></li>
+              </ul>
+            </li>
+            <li><a href="#"><i class="fa fa-sign-in"></i> Login</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="jumbotron home-jumbotron">
+      <div class="container">
+        <div class="row">
+            <div class="col-md-7 col-sm-12 animated bounceInLeft">
+                <h3>Introducing <strong>Mee6</strong> the <img src="img/discord-logo.svg" class="discord-logo2"> bot </h3>
+                <h1>Release your <span id="rotating">!power,!mana,!chakra,!skill</span></h1>
+                <h2>for everyone in your <img src="img/discord.svg" class="discord-logo1"> server</h2>
+                <p>
+                    <a href="#" class="btn btn-home btn-lg">Add to discord</a>
+                    <a href="#" class="btn btn-about btn-lg">About</a>
+                </p>
+            </div>
+            <div class="col-md-5 hidden-sm hidden-xs text-center animated bounceInRight">
+                <img src="img/meeseeks.png">
+            </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="js/morphext.min.js"></script>
+    <script>
+    $("#rotating").Morphext({
+        animation: "bounceIn",
+        separator: ",",
+        speed: 2000,
+        complete: function () {
+
+        }
+    });
+    </script>
+  </body>
+</html>
