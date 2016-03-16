@@ -48,11 +48,16 @@ def make_session(token=None, state=None, scope=None):
 
 @app.route('/')
 def index():
-    user = session.get('user')
-    if user is not None:
-        return redirect(url_for('select_server'))
-
     return render_template('index.html')
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('user')
+    return redirect(url_for('index'))
 
 @app.route('/login')
 def login():
@@ -87,26 +92,31 @@ def get_or_update_user():
         discord = make_session(token=oauth2_token)
         session['user'] = discord.get(API_BASE_URL + '/users/@me').json()
         session['guilds'] = discord.get(API_BASE_URL + '/users/@me/guilds').json()
+        print(url_for('static', filename='img/no_logo.png'))
+        if session['user'].get('avatar') is None:
+            session['user']['avatar'] = url_for('static', filename='img/no_logo.png')
+        else:
+            session['user']['avatar'] = "https://cdn.discordapp.com/avatars/"+session['user']['id']+"/"+{{session['user']['avatar']}}+".jpg"
 
 
-def get_user_server(user, guilds):
+def get_user_servers(user, guilds):
     return list(filter(lambda g: g['owner'] is True, guilds))
 
 @app.route('/servers')
 @require_auth
 def select_server():
     get_or_update_user()
-    user_servers = get_user_server(session['user'], session['guilds'])
+    user_servers = get_user_servers(session['user'], session['guilds'])
 
-    return render_template('select_server.html', user_servers=user_servers)
+    return render_template('select-server.html', user_servers=user_servers)
 
 def server_check(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
-        server_id = args[0]
-        server_ids = redis.smembers('servers')
+        server_id = kwargs.get('server_id')
+        server_ids = db.smembers('servers')
 
-        if server_id not in server_ids:
+        if str(server_id) not in server_ids:
             url = "https://discordapp.com/oauth2/authorize?&client_id={}"\
                 "&scope=bot&permissions={}&guild_id={}".format(
                 OAUTH2_CLIENT_ID,
@@ -121,9 +131,9 @@ def server_check(f):
 def require_bot_admin(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
-        server_id = args[0]
-        user_servers = get_user_server(session['user'], session['guilds'])
-        if server_id not in list(map(lambda g: g['id'], user_servers)):
+        server_id = kwargs.get('server_id')
+        user_servers = get_user_servers(session['user'], session['guilds'])
+        if str(server_id) not in list(map(lambda g: g['id'], user_servers)):
             return redirect(url_for('select_server'))
 
         return f(*args, **kwargs)
@@ -134,6 +144,9 @@ def require_bot_admin(f):
 @require_bot_admin
 @server_check
 def dashboard(server_id):
-    return "Welcome to server "+server_id
+    servers = session['guilds']
+    server = list(filter(lambda g: g['id']==str(server_id), servers))[0]
+    enabled_plugins = db.smembers('plugins:{}'.format(server_id))
+    return render_template('dashboard.html', server=server, enabled_plugins=enabled_plugins)
 
 app.run()
