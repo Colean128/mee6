@@ -20,6 +20,21 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 db = redis.Redis.from_url(REDIS_URL, decode_responses=True)
 
+# CSRF
+@app.before_request
+def csrf_protect():
+    if request.method == "POST":
+        token = session.pop('_csrf_token', None)
+        if not token or token != request.form.get('_csrf_token'):
+            abort(403)
+
+def generate_csrf_token():
+    if '_csrf_token' not in session:
+        session['_csrf_token'] = some_random_string()
+    return session['_csrf_token']
+
+app.jinja_env.globals['csrf_token'] = generate_csrf_token 
+
 def token_updater(token):
     session['oauth2_token'] = token
 
@@ -166,5 +181,21 @@ def dashboard(server_id):
     server = list(filter(lambda g: g['id']==str(server_id), servers))[0]
     enabled_plugins = db.smembers('plugins:{}'.format(server_id))
     return render_template('dashboard.html', server=server, enabled_plugins=enabled_plugins)
+
+@app.route('/dashboard/<int:server_id>/commands')
+@require_auth
+@require_bot_admin
+@server_check
+def plugin_commands(server_id):
+    disable = request.args.get('disable')
+    if disable:
+        db.srem('plugins:{}'.format(server_id), 'Commands')
+        return redirect(url_for('dashboard', server_id=server_id))
+
+    db.sadd('plugins:{}'.format(server_id), 'Commands')
+    servers = session['guilds']
+    server = list(filter(lambda g: g['id']==str(server_id), servers))[0]
+    enabled_plugins = db.smembers('plugins:{}'.format(server_id))
+    return render_template('plugin-commands.html', server=server, enabled_plugins=enabled_plugins)
 
 app.run()
