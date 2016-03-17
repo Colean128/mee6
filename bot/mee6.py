@@ -8,6 +8,7 @@ from time import time
 
 from plugins.hello import Hello
 from plugins.commands import Commands
+from plugins.help import Help
 
 log = logging.getLogger('discord')
 

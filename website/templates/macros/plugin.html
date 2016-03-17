@@ -3,7 +3,7 @@
     {% set pretty_name=name %}
 {% endif %}
 {% if soon == False%}
-<a href="{{url_for('plugin_commands', server_id=server.id)}}" class="{{name}} list-group-item">
+<a href="{{url_for(view, server_id=server.id)}}" class="{{name}} list-group-item">
   {% if name in enabled_plugins %}
   <span class="badge enabled">Enabled</span>
   {% else %}

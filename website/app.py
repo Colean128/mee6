@@ -254,7 +254,7 @@ def delete_command(server_id, command):
     flash('Command {} deleted !'.format(command), 'success')
     return redirect(url_for('plugin_commands', server_id=server_id))
 
-@app.route('/dashboard/<int:server_id>/commands')
+@app.route('/dashboard/<int:server_id>/help')
 @require_auth
 @require_bot_admin
 @server_check
