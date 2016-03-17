@@ -18,7 +18,8 @@
                     $("#select").change(function () {
                         var val = jQuery(this).val();
                         if(val!='')
-                            location.href = jQuery(this).val();
+                            window.open(jQuery(this).val());
+                            location.reload();
                     })
                  </script>
                  {% else %}
