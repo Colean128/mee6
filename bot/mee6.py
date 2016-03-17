@@ -38,7 +38,7 @@ class Mee6(discord.Client):
     def on_server_join(self, server):
         log.info('Joined {} server : {} !'.format(server.owner.name, server.name))
         log.debug('Adding server {}\'s id to db'.format(server.id))
-        self.db.sadd('servers', server.id)
+        self.db.redis.sadd('servers', server.id)
 
     @asyncio.coroutine
     def heartbeat(self, interval):
