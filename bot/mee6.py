@@ -30,11 +30,13 @@ class Mee6(discord.Client):
 
     def add_all_servers(self):
         for server in self.servers:
-            self.db.sadd('servers', server.id)
+            log.debug('Adding server {}\'s id to db'.format(server.id))
+            self.db.redis.sadd('servers', server.id)
 
     @asyncio.coroutine
     def on_server_join(self, server):
         log.info('Joined {} server : {} !'.format(server.owner.name, server.name))
+        log.debug('Adding server {}\'s id to db'.format(server.id))
         self.db.sadd('servers', server.id)
 
     @asyncio.coroutine
