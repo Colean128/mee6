@@ -154,7 +154,7 @@ def server_check(f):
             url = "https://discordapp.com/oauth2/authorize?&client_id={}"\
                 "&scope=bot&permissions={}&guild_id={}".format(
                 OAUTH2_CLIENT_ID,
-                '1'*32,
+                '66321471',
                 server_id
                 )
             return redirect(url)
