@@ -17,9 +17,14 @@
                  <script>
                     $("#select").change(function () {
                         var val = jQuery(this).val();
-                        if(val!='')
-                            window.open(jQuery(this).val());
-                            location.reload();
+                        if(val!=''){
+                            var win = window.open(jQuery(this).val());
+                            var check = function(){
+                                if(win.closed)
+                                    location.href = val;
+                            }
+                            setInterval(check, 300)
+                        }
                     })
                  </script>
                  {% else %}
