@@ -254,5 +254,26 @@ def delete_command(server_id, command):
     flash('Command {} deleted !'.format(command), 'success')
     return redirect(url_for('plugin_commands', server_id=server_id))
 
+@app.route('/dashboard/<int:server_id>/commands')
+@require_auth
+@require_bot_admin
+@server_check
+def plugin_help(server_id):
+    disable = request.args.get('disable')
+    if disable:
+        db.srem('plugins:{}'.format(server_id), 'Help')
+        return redirect(url_for('dashboard', server_id=server_id))
+
+    db.sadd('plugins:{}'.format(server_id), 'Help')
+
+    servers = session['guilds']
+    server = list(filter(lambda g: g['id']==str(server_id), servers))[0]
+    enabled_plugins = db.smembers('plugins:{}'.format(server_id))
+
+    return render_template('plugin-help.html',
+        server=server,
+        enabled_plugins=enabled_plugins
+        )
+
 
 app.run()

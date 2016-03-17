@@ -1,0 +1,32 @@
+{% macro view(name, view='', pretty_name='', description='', soon=False, server=None, enabled_plugins=[]) %}
+{% if pretty_name=='' %}
+    {% set pretty_name=name %}
+{% endif %}
+{% if soon == False%}
+<a href="{{url_for('plugin_commands', server_id=server.id)}}" class="{{name}} list-group-item">
+  {% if name in enabled_plugins %}
+  <span class="badge enabled">Enabled</span>
+  {% else %}
+  <span class="badge disabled">Disabled</span>
+  <script>
+  $('.{{name}}').click(function(e) {
+      e.preventDefault();
+      var $link = $(this);
+      bootbox.confirm("Enable the plugin ?", function (confirmation) {
+          confirmation && document.location.assign($link.attr('href'));
+      });
+      });
+  </script>
+  {% endif %}
+{% else %}
+<div class="list-group-item">
+<span class="badge soon">Soon</span>
+{% endif %}
+  <h4 class="list-group-item-heading">{{pretty_name}}</h4>
+  <p class="list-group-item-text">{{description|safe}}</p>
+{% if soon == False%}
+</a>
+{% else %}
+</div>
+{%endif%}
+{% endmacro %}
