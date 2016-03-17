@@ -86,4 +86,5 @@
 .home-body{
     background-color: #008cba;
     color:#FFF;
+    overflow: hidden;
 }
