@@ -1,5 +1,8 @@
 from plugin import Plugin
 import asyncio
+import logging
+
+log = logging.getLogger('discord')
 
 class Commands(Plugin):
 
@@ -21,6 +24,12 @@ class Commands(Plugin):
         storage = self.get_storage(message.server)
         commands = storage.smembers('commands')
         if message.content in commands:
+            log.info('{}#{}@{} >> {}'.format(
+                message.author.name,
+                message.author.discriminator,
+                message.server.name,
+                message.content
+            ))
             response = storage.get('command:{}'.format(message.content))
             yield from self.mee6.send_message(
                 message.channel,

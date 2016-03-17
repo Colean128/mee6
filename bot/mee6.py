@@ -37,6 +37,11 @@ class Mee6(discord.Client):
             self.db.redis.sadd('servers', server.id)
 
     @asyncio.coroutine
+    def send_message(self, *args, **kwargs):
+        log.info('Mee6 >> {}'.format(args[1].replace('\n', '~')))
+        yield from super().send_message(*args, **kwargs)
+
+    @asyncio.coroutine
     def on_server_join(self, server):
         log.info('Joined {} server : {} !'.format(server.owner.name, server.name))
         log.debug('Adding server {}\'s id to db'.format(server.id))

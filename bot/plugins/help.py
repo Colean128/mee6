@@ -1,7 +1,9 @@
 from plugin import Plugin
 import asyncio
-
+import logging
 from types import MethodType
+
+log = logging.getLogger('discord')
 
 def get_help_info(self, server):
     if self.fancy_name is None:
@@ -48,6 +50,11 @@ class Help(Plugin):
     @asyncio.coroutine
     def on_message(self, message):
         if message.content =='!help':
+            log.info('{}#{}@{} >> !help'.format(
+                message.author.name,
+                message.author.discriminator,
+                message.server.name
+            ))
             server = message.server
             help_message = self.generate_help(server)
             if help_message == '':
