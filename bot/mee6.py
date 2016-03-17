@@ -6,7 +6,6 @@ from database import Db
 from utils import find_server
 from time import time
 
-from plugins.hello import Hello
 from plugins.commands import Commands
 from plugins.help import Help
 
