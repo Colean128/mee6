@@ -2,11 +2,10 @@
   <ul class="nav navbar-nav pull-right">
     <li><a href="{{url_for('index')}}">Home</a></li>
     <li><a href="{{url_for('about')}}">About</a></li>
-    <li><a href="#">Blog</a></li>
-    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown" id="community">Community</a>
+    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown" id="community">Community <b class="caret"></b></a>
         <ul class="dropdown-menu" aria-labelledby="community">
-        <li><a href="#">Discord</a></li>
-        <li><a href="#">Github</a></li>
+        <li><a href="https://discord.gg/0tOgeGSG9kVB6BRa" target="_blank">Discord</a></li>
+        <li><a target="_blank" href="https://github.com/cookkkie/mee6">Github</a></li>
       </ul>
     </li>
     {% if session['user'] is defined %}
