@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="jumbotron dashboard-jumbotron">
+    <div class="container">
+        <div class="row vertical-align">
+            <div class="col-md-12">
+                <h2>
+                    <img style="width:100px;" src="{{url_for('static', filename='img/meeseeks.png')}}">
+                    {% if server['icon'] %}
+                    <img style="width:100px;" class="img-circle" src="https://discordapp.com/api/guilds/{{server['id']}}/icons/{{server['icon']}}.jpg">
+                    {% endif %}
+                    {{server['name']}}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+{% block dash_content %}
+{% endblock %}
+{% endblock %}

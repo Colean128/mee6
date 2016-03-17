@@ -1,0 +1,64 @@
+{% extends 'dash_base.html' %}
+{% block dash_content %}
+    <div class="container">
+        <div class="row">
+            {% include 'sidebar.html' %}
+
+            <div class="col-md-8">
+                <h3>Commands <a href="?disable=1" class="btn btn-warning btn-xs">Disable</a></h3>
+                {% include 'flash.html' %}
+                {% set csrf =  csrf_token() %}
+                <table class="table table-striped table-hover ">
+                  <thead>
+                    <tr>
+                      <th>Command</th>
+                      <th>Message</th>
+                      <th>Edit</th>
+                      <th>Delete</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for cmd in commands %}
+                    <tr>
+                      <td><h4><strong>{{cmd['name']}}</strong></h4></td>
+                      <td>
+                          <form action="{{url_for('add_command', server_id=server.id)}}?edit=1" method='post' id="{{cmd['name'][1:]}}">
+                          <input name=_csrf_token type=hidden value="{{ csrf }}">
+                          <input name="cmd_name" type="hidden" value="{{cmd['name']}}">
+                          <textarea class="form-control" name="cmd_message" rows="3" style="resize:vertical">{{cmd['message']}}</textarea>
+                          </form>
+                      </td>
+                      <td><a href="#" id="edit_{{cmd['name'][1:]}}" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i> Edit</a></td>
+                      <td><a href="{{url_for('delete_command', server_id=server.id, command=cmd['name'])}}" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Delete</a></td>
+                      <script>
+                        $('#edit_{{cmd['name'][1:]}}').click(function(){
+                            $('#{{cmd['name'][1:]}}').submit()
+                        })
+                      </script>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                <h4>Add a command</h4>
+                  <form id="add_form" method="post" action="{{url_for('add_command', server_id=server.id)}}">
+                  <input name=_csrf_token type=hidden value="{{ csrf }}">
+                  <div class="input-group">
+                    <span class="input-group-addon">!</span>
+                    <input class="form-control" type="text" name="cmd_name" placeholder="command">
+                  </div><br />
+                  <textarea class="form-control" name="cmd_message" placeholder="message"></textarea>
+
+                  <br />
+                  <center><a href="#" id="add" class="btn btn-success"><i class="fa fa-pencil"></i> Add</a></center>
+                  </form>
+                  <script>
+                    $('#add').click(function(){
+                        $('#add_form').submit();
+                    })
+                  </script>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

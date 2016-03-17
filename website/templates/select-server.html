@@ -1,0 +1,34 @@
+{% extends 'full-page.html' %}
+{% block content %}
+<div class="jumbotron home-jumbotron">
+  <div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4 animated bounceInDown text-center">
+            <img src="{{ url_for('static', filename='img/meeseeks.png') }}">
+            <h3>Select a <img src="{{ url_for('static', filename='img/discord-logo.svg') }}" class="discord-logo2"> server : </h3>
+            <div class="form-group">
+                {% if user_servers %}
+                <select class="form-control" id="select">
+                    <option value="">Make your choice ;)</option>
+                    {% for server in user_servers %}
+                    <option value='{{url_for('dashboard', server_id=server['id'])}}'>{{server['name']}}</option>
+                    {% endfor %}
+                 </select>
+                 <script>
+                    $("#select").change(function () {
+                        var val = jQuery(this).val();
+                        if(val!='')
+                            location.href = jQuery(this).val();
+                    })
+                 </script>
+                 {% else %}
+                 <h3>... It looks like you don't have any server !</h3>
+                 <h3>Go create one ! <br/>I'm waiting for you ;) </h3>
+                 {% endif %}
+            </div>
+        </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

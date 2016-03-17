@@ -1,0 +1,26 @@
+<div id="navbar" class="navbar-collapse collapse">
+  <ul class="nav navbar-nav pull-right">
+    <li><a href="{{url_for('index')}}">Home</a></li>
+    <li><a href="{{url_for('about')}}">About</a></li>
+    <li><a href="#">Blog</a></li>
+    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown" id="community">Community</a>
+        <ul class="dropdown-menu" aria-labelledby="community">
+        <li><a href="#">Twitter</a></li>
+        <li><a href="#">Discord</a></li>
+        <li><a href="#">Github</a></li>
+      </ul>
+    </li>
+    {% if session['user'] is defined %}
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <img src="{{session['user']['avatar']}}" class="profile-image img-circle"> Cookie <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li><a href="{{url_for('select_server')}}">Servers</a></li>
+            <li><a href="{{url_for('logout')}}"><i class="fa fa-sign-out"></i> Sign-out</a></li>
+        </ul>
+    </li>
+    {% else %}
+    <li><a href="{{url_for('login')}}"><i class="fa fa-sign-in"></i> Login</a></li>
+    {% endif %}
+  </ul>
+</div>
