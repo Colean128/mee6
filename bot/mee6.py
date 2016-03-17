@@ -30,6 +30,8 @@ class Mee6(discord.Client):
         discord.utils.create_task(self.update_stats(60), loop=self.loop)
 
     def add_all_servers(self):
+        log.debug('Syncing servers and db')
+        self.db.redis.delete('servers')
         for server in self.servers:
             log.debug('Adding server {}\'s id to db'.format(server.id))
             self.db.redis.sadd('servers', server.id)
@@ -39,6 +41,12 @@ class Mee6(discord.Client):
         log.info('Joined {} server : {} !'.format(server.owner.name, server.name))
         log.debug('Adding server {}\'s id to db'.format(server.id))
         self.db.redis.sadd('servers', server.id)
+
+    @asyncio.coroutine
+    def on_server_remove(self, server):
+        log.info('Leaving {} server : {} !'.format(server.owner.name, server.name))
+        log.debug('Removing server {}\'s id from the db'.format(server.id))
+        self.db.redis.srem('servers', server.id)
 
     @asyncio.coroutine
     def heartbeat(self, interval):
