@@ -67,16 +67,6 @@ def make_session(token=None, state=None, scope=None):
 
 @app.route('/')
 def index():
-    oauth2_token = request.cookies.get('oauth2_token')
-    # I remember you !
-    if oauth2_token:
-        oauth2_token = json.loads(oauth2_token)
-        session['oauth2_token'] = oauth2_token
-        try:
-            get_or_update_user()
-            return redirect(url_for('select_server'))
-        except:
-            pass
     return render_template('index.html')
 
 @app.route('/about')
@@ -87,9 +77,7 @@ def about():
 def logout():
     session.pop('user')
 
-    resp = make_response(redirect(url_for('index')))
-    resp.set_cookie('oauth2_token', '', expires=0)
-    return resp
+    return redirect(url_for('index'))
 
 @app.route('/login')
 def login():
@@ -116,11 +104,7 @@ def confirm_login():
     session['oauth2_token'] = token
     get_or_update_user()
 
-    resp = make_response(redirect(url_for('select_server')))
-    #I'll remember you !
-    resp.set_cookie('oauth2_token', json.dumps(token), max_age=3600*24*7)
-
-    return resp
+    return redirect(url_for('select_server'))
 
 def get_or_update_user():
     oauth2_token = session.get('oauth2_token')
