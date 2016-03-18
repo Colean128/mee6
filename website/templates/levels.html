@@ -22,7 +22,11 @@
                           <h3><strong>#{{loop.index}}</strong></h3>
                       </div>
                       <div class="col-md-1 col-sm-1 hidden-xs" style="padding:0">
+                        {% if player['avatar'] %}
                         <img src="https://discordapp.com/api/users/{{player['id']}}/avatars/{{player['avatar']}}.jpg" style="width:100%" class="img-circle">
+                        {%else%}
+                        <img src="{{url_for('static', filename='img/no_logo.png')}}" style="width:100%" class="img-circle">
+                        {%endif%}
                       </div>
                       <div class="col-md-5 col-sm-5 col-xs-6">
                           <h3>{{player['name']}} <small>#{{player['discriminator']}}</small></h3>

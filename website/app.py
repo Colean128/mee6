@@ -112,7 +112,6 @@ def get_or_update_user():
         discord = make_session(token=oauth2_token)
         session['user'] = discord.get(API_BASE_URL + '/users/@me').json()
         session['guilds'] = discord.get(API_BASE_URL + '/users/@me/guilds').json()
-        print(url_for('static', filename='img/no_logo.png'))
         if session['user'].get('avatar') is None:
             session['user']['avatar'] = url_for('static', filename='img/no_logo.png')
         else:
@@ -367,7 +366,7 @@ def levels(server_id):
             'id': _players[i+5]
         }
         players.append(player)
-    return render_template('levels.html', players=players, server=server)
+    return render_template('levels.html', players=players, server=server, title="{} leaderboard - Mee6 bot".format(server['name']))
 
 if __name__=='__main__':
     app.debug = True
