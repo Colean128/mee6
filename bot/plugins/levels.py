@@ -62,7 +62,12 @@ class Levels(Plugin):
 
             player_xp = storage.get('player:{}:xp'.format(player.id))
             player_lvl = storage.get('player:{}:lvl'.format(player.id))
-            player_rank = storage.sort('players', by='players:*:xp').index(player.id)+1
+            players = self.mee6.db.redis.sort('Levels.{}:players'.format(message.server.id),
+                        by='Levels.{}:player:*:xp'.format(message.server.id),
+                        start=0,
+                        num=-1,
+                        desc=True)
+            player_rank = players.index(player.id)+1
 
             response = '{} : **LEVEL {}** / **TOTAL XP {}** / **Rank {}/{}**'.format(
                 player.mention,
