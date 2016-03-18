@@ -9,6 +9,7 @@ from time import time
 from plugins.commands import Commands
 from plugins.help import Help
 from plugins.levels import Levels
+from plugins.welcome import Welcome
 
 log = logging.getLogger('discord')
 
