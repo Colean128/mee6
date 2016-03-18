@@ -15,8 +15,6 @@ def get_help_info(self, server):
     }
     return payload
 
-def get_commands(self):
-    return []
 
 class Help(Plugin):
 
@@ -24,15 +22,14 @@ class Help(Plugin):
         Plugin.__init__(self, *args, **kwargs)
         # Patch the Plugin class
         Plugin.get_help_info = get_help_info
-        Plugin.get_commands = get_commands
-
+    
     def generate_help(self, server):
         enabled_plugins = self.mee6.plugin_manager.get_all(server)
         enabled_plugins = sorted(enabled_plugins, key=lambda p: type(p).__name__)
 
         help_payload = []
         for plugin in enabled_plugins:
-            if not isinstance(plugin, Help):
+            if not isinstance(plugin, Help) and hasattr(plugin, 'get_commands'):
                 help_info = plugin.get_help_info(server)
                 help_payload.append(help_info)
 
@@ -41,7 +38,8 @@ class Help(Plugin):
     def render_message(self, help_payload):
         message = ""
         for plugin_info in help_payload:
-            message += "**{}**\n".format(plugin_info['fancy_name'])
+            if plugin_info['commands'] != []:
+                message += "**{}**\n".format(plugin_info['fancy_name'])
             for cmd in plugin_info['commands']:
                 message += "   **{}** {}\n".format(cmd['name'], cmd.get('description', ''))
         return message
