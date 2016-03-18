@@ -82,6 +82,11 @@
     background-color: #006687;
     color:#FFF;
 }
+.v-align {
+    float: none;
+    display: inline-block;
+    vertical-align: middle;
+}
 
 .home-body{
     background-color: #008cba;

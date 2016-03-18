@@ -1,0 +1,33 @@
+{% extends 'dash_base.html' %}
+{% block dash_content %}
+    <div class="container">
+        <div class="row">
+            {% include 'sidebar.html' %}
+            {% set csrf =  csrf_token() %}
+            <div class="col-md-8">
+                <h3>Levels <a href="?disable=1" class="btn btn-warning btn-xs">Disable</a></h3>
+                {% include 'flash.html' %}
+                <form id="levels" method="POST" action="{{url_for('update_levels', server_id=server['id'])}}">
+                    <div class="form-group">
+                      <input name=_csrf_token type=hidden value="{{ csrf }}">
+                      <label class="control-label" for="announcement">Level UP announcement</label>
+                      <input class="form-control input-lg" name="announcement" value="{{announcement}}" ype="text" id="announcement">
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" name="enable" {% if announcement_enabled %} checked {% endif %}> Enable/Disable
+                        </label>
+                      </div>
+                      <div class="well well-sm">
+                          <strong>Tips: </strong> <i>{player}</i> reffers to the player, <i>{lvl}</i> to his level.<br /><br />
+                          <strong>Commands: !rank !levels</strong><br /><br />
+                          <strong>Leaderboard: </strong><a href="{{url_for('levels', server_id=server['id'])}}" target="_blank">HERE</a> !
+                      </div>
+                      <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

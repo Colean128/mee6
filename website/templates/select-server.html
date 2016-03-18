@@ -18,19 +18,7 @@
                     $("#select").change(function () {
                         var val = jQuery(this).val();
                         if(val!=''){
-                            var watch = true;
-                            var win = window.open(jQuery(this).val());
-                            setTimeout(function(){
-                                console.log(win.location.hostname)
-                                console.log(window.location.hostname)
-                                if(win.location.hostname==window.location.hostname)
-                                    watch = false;
-                            },2000)
-                            var check = function(){
-                                if(win.closed && watch)
-                                    location.href = val;
-                            }
-                            setInterval(check, 300)
+                            location.href = val
                         }
                     })
                  </script>

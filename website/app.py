@@ -6,6 +6,7 @@ from requests_oauthlib import OAuth2Session
 import redis
 import json
 import binascii
+from math import floor
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", "qdaopdsjDJ9u&çed&ndlnad&pjéà&jdndqld")
@@ -16,6 +17,7 @@ OAUTH2_CLIENT_SECRET = os.environ['OAUTH2_CLIENT_SECRET']
 OAUTH2_REDIRECT_URI = os.environ.get('OAUTH2_REDIRECT_URI', 'http://localhost:5000/confirm_login')
 API_BASE_URL = os.environ.get('API_BASE_URL', 'https://discordapp.com/api')
 AUTHORIZATION_BASE_URL = API_BASE_URL + '/oauth2/authorize'
+DOMAIN = os.environ.get('VIRTUAL_HOST', 'localhost:5000')
 TOKEN_URL = API_BASE_URL + '/oauth2/token'
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
@@ -139,6 +141,10 @@ def get_user_servers(user, guilds):
 @app.route('/servers')
 @require_auth
 def select_server():
+    guild_id = request.args.get('guild_id')
+    if guild_id:
+        return redirect(url_for('dashboard', server_id=int(guild_id)))
+
     get_or_update_user()
     user_servers = get_user_servers(session['user'], session['guilds'])
 
@@ -152,10 +158,11 @@ def server_check(f):
 
         if str(server_id) not in server_ids:
             url = "https://discordapp.com/oauth2/authorize?&client_id={}"\
-                "&scope=bot&permissions={}&guild_id={}".format(
+                "&scope=bot&permissions={}&guild_id={}&response_type=code&redirect_uri=http://{}/servers".format(
                 OAUTH2_CLIENT_ID,
                 '66321471',
-                server_id
+                server_id,
+                DOMAIN
                 )
             return redirect(url)
 
@@ -273,6 +280,110 @@ def plugin_help(server_id):
         server=server,
         enabled_plugins=enabled_plugins
         )
+
+@app.route('/dashboard/<int:server_id>/levels')
+@require_auth
+@require_bot_admin
+@server_check
+def plugin_levels(server_id):
+    disable = request.args.get('disable')
+    if disable:
+        db.srem('plugins:{}'.format(server_id), 'Levels')
+        return redirect(url_for('dashboard', server_id=server_id))
+    db.sadd('plugins:{}'.format(server_id), 'Levels')
+    servers = session['guilds']
+    server = list(filter(lambda g: g['id']==str(server_id), servers))[0]
+    enabled_plugins = db.smembers('plugins:{}'.format(server_id))
+
+    initial_announcement = 'GG {player}, you just advanced to **level {level}** !'
+    announcement_enabled = db.get('Levels.{}:announcement_enabled'.format(server_id))
+    announcement = db.get('Levels.{}:announcement'.format(server_id))
+    if announcement is None:
+        db.set('Levels.{}:announcement'.format(server_id), initial_announcement)
+        db.set('Levels.{}:announcement_enabled'.format(server_id), '1')
+        announcement_enabled = '1'
+
+    announcement = db.get('Levels.{}:announcement'.format(server_id))
+
+    return render_template('plugin-levels.html',
+        server=server,
+        enabled_plugins=enabled_plugins,
+        announcement=announcement,
+        announcement_enabled=announcement_enabled
+        )
+
+@app.route('/dashboard/<int:server_id>/levels/update', methods=['POST'])
+@require_auth
+@require_bot_admin
+@server_check
+def update_levels(server_id):
+    servers = session['guilds']
+    server = list(filter(lambda g: g['id']==str(server_id), servers))[0]
+
+    announcement = request.form.get('announcement')
+    enable = request.form.get('enable')
+
+    if announcement == '' or len(announcement) > 2000:
+        flash('The level up announcement could not be empty or have 2000+ characters.', 'warning')
+    else:
+        db.set('Levels.{}:announcement'.format(server_id), announcement)
+        if enable:
+            db.set('Levels.{}:announcement_enabled'.format(server_id), '1')
+        else:
+            db.delete('Levels.{}:announcement_enabled'.format(server_id))
+        flash('Settings updated ;) !', 'success')
+
+    return redirect(url_for('plugin_levels', server_id=server_id))
+
+
+@app.route('/levels/<int:server_id>')
+def levels(server_id):
+    server_check = str(server_id) in db.smembers('servers')
+    if not server_check:
+        return redirect(url_for('index'))
+    plugin_check = 'Levels' in db.smembers('plugins:{}'.format(server_id))
+    if not plugin_check:
+        return redirect(url_for('index'))
+
+    server = {
+        'id': server_id,
+        'icon': db.get('server:{}:icon'.format(server_id)),
+        'name': db.get('server:{}:name'.format(server_id))
+    }
+
+    _players = db.sort('Levels.{}:players'.format(server_id),
+                by='Levels.{}:player:*:xp'.format(server_id),
+                get=[
+                    'Levels.{}:player:*:xp'.format(server_id),
+                    'Levels.{}:player:*:lvl'.format(server_id),
+                    'Levels.{}:player:*:name'.format(server_id),
+                    'Levels.{}:player:*:avatar'.format(server_id),
+                    'Levels.{}:player:*:discriminator'.format(server_id),
+                    '#'
+                     ],
+                start=0,
+                num=100,
+                desc=True)
+
+    players = []
+    for i in range(0, len(_players),6):
+        lvl = int(_players[i+1])
+        x = 0
+        for l in range(0,lvl-1):
+            x += 100*(1.2**l)
+        remaining_xp = int(_players[i]) - x
+        player = {
+            'xp': remaining_xp,
+            'lvl': _players[i+1],
+            'lvl_xp': int(100*(1.2**lvl)),
+            'xp_percent': floor(100*(remaining_xp)/(100*(1.2**lvl))),
+            'name': _players[i+2],
+            'avatar': _players[i+3],
+            'discriminator': _players[i+4],
+            'id': _players[i+5]
+        }
+        players.append(player)
+    return render_template('levels.html', players=players, server=server)
 
 if __name__=='__main__':
     app.debug = True

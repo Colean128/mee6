@@ -8,6 +8,7 @@ from time import time
 
 from plugins.commands import Commands
 from plugins.help import Help
+from plugins.levels import Levels
 
 log = logging.getLogger('discord')
 
@@ -45,6 +46,9 @@ class Mee6(discord.Client):
         log.info('Joined {} server : {} !'.format(server.owner.name, server.name))
         log.debug('Adding server {}\'s id to db'.format(server.id))
         self.db.redis.sadd('servers', server.id)
+        self.db.redis.set('server:{}:name'.format(server.id), server.name)
+        if server.icon:
+            self.db.redis.set('server:{}:icon'.format(server.id), server.icon)
 
     @asyncio.coroutine
     def on_server_remove(self, server):
