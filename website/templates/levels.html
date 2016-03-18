@@ -28,10 +28,10 @@
                         <img src="{{url_for('static', filename='img/no_logo.png')}}" style="width:100%" class="img-circle">
                         {%endif%}
                       </div>
-                      <div class="col-md-5 col-sm-5 col-xs-6">
+                      <div class="col-md-4 col-sm-4 col-xs-5">
                           <h3>{{player['name']}} <small>#{{player['discriminator']}}</small></h3>
                       </div>
-                      <div class="col-md-3 col-sm-3 col-xs-3">
+                      <div class="col-md-4 col-sm-4 col-xs-4">
                           <center><h5>{{player['xp']}} / {{player['lvl_xp']}} <strong>XP</strong> [{{player['total_xp']}} total]</h5></center>
                           <div class="progress progress-striped">
                             <div class="progress-bar progress-bar-info" style="width: {{player['xp_percent']}}%"></div>
