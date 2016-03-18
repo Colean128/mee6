@@ -106,7 +106,7 @@ class Levels(Plugin):
         # Give random xp between 5 and 10
         storage.incr('player:{}:xp'.format(player.id), amount=randint(5,10))
         # Block the player for 60 sec (that's 1 min btw...)
-        storage.set('player:{}:check'.format(player.id), '1', 60)
+        storage.set('player:{}:check'.format(player.id), '1', ex=60)
         # Get the new player xp
         player_xp = storage.get('player:{}:xp'.format(player.id))
         # Update the level
