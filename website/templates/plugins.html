@@ -23,6 +23,13 @@
           server=server,
           enabled_plugins=enabled_plugins
           )}}
+          {{ plugin.view(
+              'Welcome',
+              view='plugin_welcome',
+              description='Display a welcome message to members joining your server !',
+              server=server,
+              enabled_plugins=enabled_plugins
+              )}}
       {{ plugin.view(
           'Lol',
           view='plugin_lol',

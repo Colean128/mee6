@@ -1,0 +1,31 @@
+{% extends 'dash_base.html' %}
+{% block dash_content %}
+    <div class="container">
+        <div class="row">
+            {% include 'sidebar.html' %}
+            {% set csrf =  csrf_token() %}
+            <div class="col-md-8">
+                <h3>Welcome <a href="?disable=1" class="btn btn-warning btn-xs">Disable</a></h3>
+                {% include 'flash.html' %}
+                <form id="welcome" method="POST" action="{{url_for('update_welcome', server_id=server['id'])}}">
+                    <div class="form-group">
+                      <input name=_csrf_token type=hidden value="{{ csrf }}">
+                      <label class="control-label" for="welcome_message">Welcome message</label>
+                      <input class="form-control input-lg" name="welcome_message" value="{{welcome_message}}" ype="text" id="welcome_message">
+                      <div class="well well-sm">
+                          <strong>Tips: </strong> <i>{user}</i> reffers to the new member, <i>{server}</i> to your server name.
+                      </div>
+                      <label class="control-label" for="channel_name">Welcome channel</label>
+                      <input class="form-control input-lg" name="channel_name" value="{{channel_name}}" ype="text" id="channel_name">
+                      <div class="well well-sm">
+                          <strong>Warning: </strong> If the channel name is misspelled, the bot'll post the welcome message to the default channel.<br />It has to be allowed to post in that channel.<br />Do not include the # .
+                      </div>
+                      <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
