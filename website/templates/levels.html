@@ -18,22 +18,22 @@
                 {% for player in players %}
                 <div class="list-group-item">
                   <div class="row">
-                      <div class="col-md-1">
+                      <div class="col-md-1 col-sm-1 col-xs-1">
                           <h3><strong>#{{loop.index}}</strong></h3>
                       </div>
-                      <div class="col-md-1" style="padding:0">
+                      <div class="col-md-1 col-sm-1 hidden-xs" style="padding:0">
                         <img src="https://discordapp.com/api/users/{{player['id']}}/avatars/{{player['avatar']}}.jpg" style="width:100%" class="img-circle">
                       </div>
-                      <div class="col-md-5">
+                      <div class="col-md-5 col-sm-5 col-xs-6">
                           <h3>{{player['name']}} <small>#{{player['discriminator']}}</small></h3>
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-md-3 col-sm-3 col-xs-3">
                           <center><h5>{{player['xp']}} / {{player['lvl_xp']}} <strong>XP</strong></h5></center>
                           <div class="progress progress-striped">
                             <div class="progress-bar progress-bar-info" style="width: {{player['xp_percent']}}%"></div>
                           </div>
                       </div>
-                      <div class="col-md-2">
+                      <div class="col-md-2 col-sm-2 col-xs-2">
                           <h3>Level {{player['lvl']}}</h3>
                       </div>
                   </div>
