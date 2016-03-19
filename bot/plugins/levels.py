@@ -75,7 +75,8 @@ class Levels(Plugin):
             cooldown = storage.get('player:{}:cooldown'.format(message.author.id))
             if cooldown is not None:
                 return
-            storage.set('player:{}:cooldown'.format(message.author.id), '1', ex=cooldown_duration)
+            storage.set('player:{}:cooldown'.format(message.author.id), '1')
+            storage.expire('player:{}:cooldown'.format(message.author.id), cooldown_duration)
 
             if message.mentions != []:
                 player = message.mentions[0]
