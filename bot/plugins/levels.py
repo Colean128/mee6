@@ -17,6 +17,10 @@ class Levels(Plugin):
             {
                 'name': '!rank',
                 'description': 'Gives you your xp, level and rank.'
+            },
+            {
+                'name': '!rank @username',
+                'description': 'Gives username\'s xp, level and rank.'
             }
         ]
         return commands
@@ -48,14 +52,21 @@ class Levels(Plugin):
             yield from self.mee6.send_message(message.channel, response)
             return
 
-        if message.content == '!rank':
+        if message.content.startswith('!rank'):
+
             storage = self.get_storage(message.server)
-            player = message.author
+            if message.mentions != []:
+                player = message.mentions[0]
+            else:
+                player = message.author
             players = storage.smembers('players')
             if player.id not in players:
+                resp = '{}, It seems like you are not ranked. Start talking in the chat to get ranked :wink:.'
+                if player != message.author:
+                    resp = '{}, It seems like '+player.mention+' is not ranked :cry:.'
                 yield from self.mee6.send_message(message.channel,
-                    '{}, It seems like you are not ranked. Start talking in the chat to get ranked :wink:.'.format(
-                        player.mention
+                    resp.format(
+                        message.author.mention
                     )
                 )
                 return
