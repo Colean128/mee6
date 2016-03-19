@@ -22,6 +22,82 @@
                           <strong>Commands: !rank !levels</strong><br /><br />
                           <strong>Leaderboard: </strong><a href="{{url_for('levels', server_id=server['id'])}}" target="_blank">HERE</a> !
                       </div>
+
+                        <label class="control-label" for="cooldown"><strong>!rank</strong> command cooldown</label>
+                        <input class="form-control input-lg" name="cooldown" value="{% if cooldown is defined %}{{cooldown}}{%else%}0{%endif%}" ype="text" id="cooldown">
+                        <div class="well well-sm">
+                            In order to avoid people flooding the <strong>!rank</strong> command, you can set a cooldown in seconds.
+                        </div>
+
+
+                      <div class="banned_members_wrap">
+
+                            <label class="control-label" for="banned-members">Banned Members <button class="btn btn-primary btn-xs add_banned_member">Add</button></label>
+                            {%for member in banned_members %}
+                            <div class="input-group">
+                                <input type="text" class="form-control" value="{{member}}" placeholder="Member Name" name="banned_members[]" type="text" id="banned-members">
+                                <span class="input-group-btn">
+                                  <button class="btn btn-default remove_field">Remove</button>
+                                </span>
+                             </div>
+                             {% endfor %}
+                      </div>
+                      <script>
+                      $(document).ready(function() {
+                            var max_fields      = 100; //maximum input boxes allowed
+                            var wrapper         = $(".banned_members_wrap"); //Fields wrapper
+                            var add_button      = $(".add_banned_member"); //Add button ID
+
+                            var x = 1; //initlal text box count
+                            $(add_button).click(function(e){ //on add input button click
+                                e.preventDefault();
+                                if(x < max_fields){ //max input box allowed
+                                    x++; //text box increment
+                                    $(wrapper).append('<div class="input-group"><input type="text" class="form-control" placeholder="Member Name" name="banned_members[]" type="text"><span class="input-group-btn"><button class="btn btn-default remove_field">Remove</button></span></div>'); //add input box
+                                }
+                            });
+
+                            $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+
+                                e.preventDefault(); $(this).parent('').parent('').remove(); x--;
+                            })
+                        });
+                      </script>
+                      <br />
+                      <div class="banned_roles_wrap">
+
+                            <label class="control-label" for="banned-roles">Banned Roles <button class="btn btn-primary btn-xs add_banned_role">Add</button></label>
+                            {%for role in banned_roles %}
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Role Name" name="banned_roles[]" value="{{role}}" type="text" id="banned-roles">
+                                <span class="input-group-btn">
+                                  <button class="btn btn-default remove_field">Remove</button>
+                                </span>
+                             </div>
+                             {%endfor%}
+                      </div>
+                      <script>
+                      $(document).ready(function() {
+                            var max_fields      = 100; //maximum input boxes allowed
+                            var wrapper         = $(".banned_roles_wrap"); //Fields wrapper
+                            var add_button      = $(".add_banned_role"); //Add button ID
+
+                            var x = 1; //initlal text box count
+                            $(add_button).click(function(e){ //on add input button click
+                                e.preventDefault();
+                                if(x < max_fields){ //max input box allowed
+                                    x++; //text box increment
+                                    $(wrapper).append('<div class="input-group"><input type="text" class="form-control" placeholder="Role Name" name="banned_roles[]" type="text"><span class="input-group-btn"><button class="btn btn-default remove_field">Remove</button></span></div>'); //add input box
+                                }
+                            });
+
+                            $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+
+                                e.preventDefault(); $(this).parent('').parent('').remove(); x--;
+                            })
+                        });
+                      </script>
+                      <br />
                       <button type="submit" class="btn btn-primary">Update</button>
                     </div>
                 </form>

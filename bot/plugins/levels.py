@@ -38,6 +38,19 @@ class Levels(Plugin):
             level += 1
         return level
 
+    def is_ban(self, member):
+        storage = self.get_storage(member.server)
+        banned_members = storage.smembers('banned_members')
+        banned_roles = storage.smembers('banned_roles')
+        if member.name in banned_members:
+            return True
+
+        for role in member.roles:
+            if role.name in banned_roles:
+                return True
+
+        return False
+
     @asyncio.coroutine
     def on_message(self, message):
         if message.author.id == self.mee6.user.id:
@@ -52,9 +65,18 @@ class Levels(Plugin):
             yield from self.mee6.send_message(message.channel, response)
             return
 
-        if message.content.startswith('!rank'):
+        if self.is_ban(message.author):
+            return
 
+        if message.content.startswith('!rank'):
             storage = self.get_storage(message.server)
+
+            cooldown_duration = int(storage.get('cooldown') or 0)
+            cooldown = storage.get('player:{}:cooldown'.format(message.author.id))
+            if cooldown is not None:
+                return
+            storage.set('player:{}:cooldown'.format(message.author.id), '1', ex=cooldown_duration)
+
             if message.mentions != []:
                 player = message.mentions[0]
             else:
