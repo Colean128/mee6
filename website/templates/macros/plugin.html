@@ -1,8 +1,8 @@
-{% macro view(name, view='', pretty_name='', description='', soon=False, server=None, enabled_plugins=[]) %}
+{% macro view(name, view='', pretty_name='', no_links=False, description='', soon=False, server=None, enabled_plugins=[]) %}
 {% if pretty_name=='' %}
     {% set pretty_name=name %}
 {% endif %}
-{% if soon == False%}
+{% if soon == False and no_links==False%}
 <a href="{{url_for(view, server_id=server.id)}}" class="{{name}} list-group-item">
   {% if name in enabled_plugins %}
   <span class="badge enabled">Enabled</span>
@@ -20,11 +20,13 @@
   {% endif %}
 {% else %}
 <div class="list-group-item">
+{% if no_links==False %}
 <span class="badge soon">Soon</span>
+{% endif %}
 {% endif %}
   <h4 class="list-group-item-heading">{{pretty_name}}</h4>
   <p class="list-group-item-text">{{description|safe}}</p>
-{% if soon == False%}
+{% if soon == False and no_links==False%}
 </a>
 {% else %}
 </div>
