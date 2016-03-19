@@ -10,6 +10,7 @@ from plugins.commands import Commands
 from plugins.help import Help
 from plugins.levels import Levels
 from plugins.welcome import Welcome
+from plugins.animu import AnimuAndMango
 
 log = logging.getLogger('discord')
 

@@ -1,0 +1,21 @@
+{% extends 'dash_base.html' %}
+{% block dash_content %}
+    <div class="container">
+        <div class="row">
+            {% include 'sidebar.html' %}
+
+            <div class="col-md-8">
+                <h3>Animu and Mango <a href="?disable=1" class="btn btn-warning btn-xs">Disable</a></h3>
+                {% include 'flash.html' %}
+                <center>
+                <p>
+                    <img src="https://media.giphy.com/media/fraFWJOtGih9u/giphy.gif">
+                    <h1>Type <strong>!animu One Piece</strong> and <br /><strong>!mango Love Hina</strong> in your chat ;) !</h1>
+                </p>
+                </center>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
