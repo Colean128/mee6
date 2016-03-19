@@ -9,24 +9,32 @@
       enabled_plugins=enabled_plugins
       )}}
       {{ plugin.view(
-          'Help',
-          pretty_name='Help Me!',
-          view='plugin_help',
-          description='Enables the <strong>!help</strong> command.',
-          server=server,
-          enabled_plugins=enabled_plugins
-          )}}
-      {{ plugin.view(
           'Levels',
           view='plugin_levels',
-          description='Let your members gain <strong>XP</strong> and <strong>levels</strong> by participating to the chat !',
+          description='Let your members gain <strong>XP</strong> and <strong>levels</strong> by participating in the chat !',
           server=server,
           enabled_plugins=enabled_plugins
           )}}
           {{ plugin.view(
+              'AnimuAndMango',
+              pretty_name='Animu and Mango',
+              view='plugin_animu',
+              description='Search the web for your favorite animes and mangas.',
+              server=server,
+              enabled_plugins=enabled_plugins
+              )}}
+          {{ plugin.view(
+              'Help',
+              pretty_name='Help Me!',
+              view='plugin_help',
+              description='Enables the <strong>!help</strong> command.',
+              server=server,
+              enabled_plugins=enabled_plugins
+              )}}
+          {{ plugin.view(
               'Welcome',
               view='plugin_welcome',
-              description='Display a welcome message to members joining your server !',
+              description='Display a welcome message for members that have joined the server!',
               server=server,
               enabled_plugins=enabled_plugins
               )}}
