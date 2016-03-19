@@ -94,10 +94,10 @@ class AnimuAndMango(Plugin):
             'synopsis'
             ]
 
-        msg = '**{}**\n\n'.format(entry.find('title').text)
+        msg = '\n**{}**\n\n'.format(entry.find('title').text)
         for k in switcher:
             spec = entry.find(k)
-            if spec is not None:
+            if spec is not None and spec.text is not None:
                 msg += '**{}** {}\n'.format(k.capitalize()+':', html.unescape(spec.text.replace('<br />', '')))
         msg += 'http://myanimelist.net/{}/{}'.format(nature, entry.find('id').text)
 
