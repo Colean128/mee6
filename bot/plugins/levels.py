@@ -85,15 +85,27 @@ class Levels(Plugin):
                         desc=True)
             player_rank = players.index(player.id)+1
 
-            response = '{} : **LEVEL {}** | **XP {}/{}** | **TOTAL XP {}** | **Rank {}/{}**'.format(
-                player.mention,
-                player_lvl,
-                remaining_xp,
-                level_xp,
-                player_total_xp,
-                player_rank,
-                len(players)
-            )
+            if player != message.author:
+                response = '{} : **{}**\'s rank > **LEVEL {}** | **XP {}/{}** | **TOTAL XP {}** | **Rank {}/{}**'.format(
+                    message.author.mention,
+                    player.name,
+                    player_lvl,
+                    remaining_xp,
+                    level_xp,
+                    player_total_xp,
+                    player_rank,
+                    len(players)
+                )
+            else:
+                response = '{} : **LEVEL {}** | **XP {}/{}** | **TOTAL XP {}** | **Rank {}/{}**'.format(
+                    player.mention,
+                    player_lvl,
+                    remaining_xp,
+                    level_xp,
+                    player_total_xp,
+                    player_rank,
+                    len(players)
+                )
 
             yield from self.mee6.send_message(message.channel, response)
             return
