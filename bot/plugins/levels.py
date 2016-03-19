@@ -71,7 +71,7 @@ class Levels(Plugin):
         if message.content.startswith('!rank'):
             storage = self.get_storage(message.server)
 
-            cooldown_duration = int(storage.get('cooldown') or 0)
+            cooldown_duration = int(storage.get('cooldown') or -1)
             cooldown = storage.get('player:{}:cooldown'.format(message.author.id))
             if cooldown is not None:
                 return
