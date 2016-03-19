@@ -23,7 +23,7 @@ class Levels(Plugin):
 
     @staticmethod
     def _get_level_xp(n):
-        return 100*(1.2**n)
+        return int(100*(1.2**n))
 
     @staticmethod
     def _get_level_from_xp(xp):
@@ -64,7 +64,7 @@ class Levels(Plugin):
             player_lvl = storage.get('player:{}:lvl'.format(player.id))
             x = 0
             for l in range(0,int(player_lvl)):
-                x += 100*(1.2**l)
+                x += int(100*(1.2**l))
             remaining_xp = int(int(player_total_xp) - x)
             level_xp = int(Levels._get_level_xp(int(player_lvl)))
             players = self.mee6.db.redis.sort('Levels.{}:players'.format(message.server.id),
