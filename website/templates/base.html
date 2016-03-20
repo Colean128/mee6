@@ -8,7 +8,7 @@
     <meta name="author" content="Cookie">
     <link rel="shortcut icon" type="image/png" href="{{url_for('static', filename='img/favico.png')}}"/>
 
-    <title>{{ title or 'Mee6 : the discord bot !'}}</title>
+    <title>{{ title or 'Mee6 : the Discord bot !'}}</title>
 
     <!-- Bootstrap core CSS -->
     <link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet">
@@ -31,7 +31,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Mee6 <span class="badge beta-badge">BETA</span></a>
+          <a class="navbar-brand" href="{{url_for('index')}}">Mee6 <span class="badge beta-badge">BETA</span></a>
         </div>
         {% include 'navbar-menu.html' %}
       </div>
