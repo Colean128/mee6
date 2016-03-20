@@ -57,6 +57,12 @@ class Levels(Plugin):
             return
 
         if message.content == '!levels':
+            log.info('{}#{}@{} >> {}'.format(
+                message.author.name,
+                message.author.discriminator,
+                message.server.name,
+                message.content
+            ))
             url = 'http://mee6.xyz/levels/{}'.format(message.server.id)
             response = 'Go check **{}**\'s leaderboard here : {} ! :wink:'.format(
                 message.server.name,
@@ -69,6 +75,12 @@ class Levels(Plugin):
             return
 
         if message.content.startswith('!rank'):
+            log.info('{}#{}@{} >> {}'.format(
+                message.author.name,
+                message.author.discriminator,
+                message.server.name,
+                message.content
+            ))
             storage = self.get_storage(message.server)
 
             cooldown_duration = int(storage.get('cooldown') or 0)

@@ -48,6 +48,13 @@ class AnimuAndMango(Plugin):
         if check is None:
             return
 
+        log.info('{}#{}@{} >> {}'.format(
+            message.author.name,
+            message.author.discriminator,
+            message.server.name,
+            message.content
+        ))
+
         nature, name = check.groups()
 
         switcher = {'animu': 'anime', 'mango': 'manga'}

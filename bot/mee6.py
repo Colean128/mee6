@@ -40,7 +40,8 @@ class Mee6(discord.Client):
 
     @asyncio.coroutine
     def send_message(self, *args, **kwargs):
-        log.info('Mee6 >> {}'.format(args[1].replace('\n', '~')))
+        server = args[0].server
+        log.info('Mee6@{} >> {}'.format(server.name,args[1].replace('\n', '~')))
         yield from super().send_message(*args, **kwargs)
 
     @asyncio.coroutine
