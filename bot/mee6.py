@@ -23,13 +23,13 @@ class Mee6(discord.Client):
         self.plugin_manager.load_all()
         self.last_messages = []
 
-    @asyncio.coroutine
-    def on_ready(self):
+    async def on_ready(self):
         with open('welcome_ascii.txt') as f:
             print(f.read())
         self.add_all_servers()
         discord.utils.create_task(self.heartbeat(5), loop=self.loop)
         discord.utils.create_task(self.update_stats(60), loop=self.loop)
+        await self.change_status(game=discord.Game(name='http://mee6.xyz'))
 
     def add_all_servers(self):
         log.debug('Syncing servers and db')
@@ -103,6 +103,8 @@ class Mee6(discord.Client):
     async def on_message(self, message):
         mee6_server_id = "159962941502783488"
         update_channel_id = "160784396679380992"
+        if not hasattr(message, 'server'):
+            return
         if (message.server.id, message.channel.id) == (mee6_server_id, update_channel_id):
             owners = set(server.owner for server in self.servers)
             for owner in owners:
