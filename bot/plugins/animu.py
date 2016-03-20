@@ -78,7 +78,7 @@ class AnimuAndMango(Plugin):
             entry = root[0]
         else:
             msg = "**Please choose one by giving its number.**\n"
-            msg += "\n".join([ '#{} - {}'.format(n+1, entry[1].text) for n, entry in enumerate(root) ])
+            msg += "\n".join([ '{} - {}'.format(n+1, entry[1].text) for n, entry in enumerate(root) ])
 
             await self.mee6.send_message(message.channel, msg)
 
