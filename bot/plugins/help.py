@@ -22,7 +22,7 @@ class Help(Plugin):
         Plugin.__init__(self, *args, **kwargs)
         # Patch the Plugin class
         Plugin.get_help_info = get_help_info
-    
+
     def generate_help(self, server):
         enabled_plugins = self.mee6.plugin_manager.get_all(server)
         enabled_plugins = sorted(enabled_plugins, key=lambda p: type(p).__name__)

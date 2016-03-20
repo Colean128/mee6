@@ -15,13 +15,18 @@ class AnimuAndMango(Plugin):
 
     fancy_name = 'Animu and Mango'
 
-    def get_commands(self):
+    def get_commands(self, server):
         commands = [
             {
-                'name': '!animu animu_name',
+                'name': '!animu <animu_name>',
                 'description': 'Gives you information about an animu.'
+            },
+            {
+                'name': '!mango <mango_name>',
+                'description': 'Gives you information about a mango.'
             }
         ]
+        return commands
 
     async def get_xml(self, nature, name):
         auth = aiohttp.BasicAuth(login = MAL_USERNAME, password = MAL_PASSWORD)
