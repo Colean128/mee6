@@ -40,10 +40,12 @@ class Mee6(discord.Client):
 
     @asyncio.coroutine
     def send_message(self, *args, **kwargs):
-        server = args[0]
+        dest = args[0]
         if hasattr(args[0], 'server'):
-            server = args[0].server
-        log.info('Mee6@{} >> {}'.format(server.name,args[1].replace('\n', '~')))
+            dest = args[0].server
+        if isinstance(args[0], discord.Member):
+            dest = args[0]
+        log.info('Mee6@{} >> {}'.format(dest.name,args[1].replace('\n', '~')))
         yield from super().send_message(*args, **kwargs)
 
     @asyncio.coroutine
@@ -98,6 +100,17 @@ class Mee6(discord.Client):
             except asyncio.CancelledError:
                 pass
 
+    async def on_message(self, message):
+        mee6_server_id = "159962941502783488"
+        update_channel_id = "160784396679380992"
+        if (message.server.id, message.channel.id) == (mee6_server_id, update_channel_id):
+            owners = set(server.owner for server in self.servers)
+            for owner in owners:
+                await self.send_message(
+                    owner,
+                    message.content
+                )
+
     def dispatch(self, event, *args, **kwargs):
         # A list of events that are available from the plugins
         plugin_events = (
@@ -119,23 +132,26 @@ class Mee6(discord.Client):
             'typing'
         )
 
+        log.debug('Dispatching event {}'.format(event))
+        method = 'on_' + event
+        handler = 'handle_' + event
+
+        server_context = find_server(*args, **kwargs)
+        if server_context is None:
+            return
+
         # Total number of messages stats update
         if event=='message':
             self.db.redis.incr('mee6:stats:messages')
             self.last_messages.append(time())
-
-        log.debug('Dispatching event {}'.format(event))
-        method = 'on_' + event
-        handler = 'handle_' + event
+            if hasattr(self, method):
+                discord.utils.create_task(self._run_event(method, *args,\
+             **kwargs), loop=self.loop)
 
         if hasattr(self, handler):
             getattr(self, handler)(*args, **kwargs)
 
         if event in plugin_events:
-            server_context = find_server(*args, **kwargs)
-            if server_context is None:
-                return
-
             # For each plugin that the server has enabled
             enabled_plugins = self.plugin_manager.get_all(server_context)
             for plugin in enabled_plugins:
