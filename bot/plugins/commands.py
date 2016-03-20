@@ -21,6 +21,8 @@ class Commands(Plugin):
 
     @asyncio.coroutine
     def on_message(self, message):
+        if message.author.id == self.mee6.user.id:
+            return
         storage = self.get_storage(message.server)
         commands = storage.smembers('commands')
         if message.content in commands:
