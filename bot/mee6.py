@@ -136,10 +136,6 @@ class Mee6(discord.Client):
         method = 'on_' + event
         handler = 'handle_' + event
 
-        server_context = find_server(*args, **kwargs)
-        if server_context is None:
-            return
-
         # Total number of messages stats update
         if event=='message':
             self.db.redis.incr('mee6:stats:messages')
@@ -152,6 +148,9 @@ class Mee6(discord.Client):
             getattr(self, handler)(*args, **kwargs)
 
         if event in plugin_events:
+            server_context = find_server(*args, **kwargs)
+            if server_context is None:
+                return
             # For each plugin that the server has enabled
             enabled_plugins = self.plugin_manager.get_all(server_context)
             for plugin in enabled_plugins:
